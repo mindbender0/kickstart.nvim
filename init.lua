@@ -121,6 +121,11 @@ end)
 -- Enable break indent
 vim.opt.breakindent = true
 
+-- Set tab width and indentation for Neovim
+vim.opt.shiftwidth = 4 -- Indent with 4 spaces
+vim.opt.tabstop = 4 -- Tab key inserts 4 spaces
+vim.opt.expandtab = true -- Converts tabs to spaces
+
 -- Save undo history
 vim.opt.undofile = true
 
