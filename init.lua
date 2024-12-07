@@ -622,7 +622,26 @@ require('lazy').setup({
       local servers = {
         -- clangd = {},
         -- gopls = {},
-        -- pyright = {},
+        pyright = {
+          on_init = function(client)
+            -- Get the active Python version from pyenv
+            local pyenv_version = vim.fn.trim(vim.fn.system 'pyenv version-name')
+            if pyenv_version ~= '' then
+              -- Construct the path to the Python interpreter for the pyenv virtualenv
+              local pyenv_python_path = '~/.pyenv/versions/' .. pyenv_version .. '/bin/python'
+              client.config.settings.python.pythonPath = vim.fn.expand(pyenv_python_path)
+            else
+              -- Fallback to system Python if pyenv is not active
+              client.config.settings.python.pythonPath = vim.fn.exepath 'python3'
+            end
+            client.notify 'workspace/didChangeConfiguration'
+          end,
+          settings = {
+            python = {
+              venvPath = '~/.pyenv/versions', -- Path to pyenv virtualenvs
+            },
+          },
+        },
         -- rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
